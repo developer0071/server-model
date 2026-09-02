@@ -665,7 +665,14 @@
             stage.addEventListener('pointerleave', () => setClickableHover(false), { passive: true });
             stage.addEventListener('wheel', handleWheel, { passive: true });
             stage.addEventListener('keydown', handleKeyDown);
-            stage.addEventListener('click', handleClick);
+            stage.addEventListener('click', (e) => {
+                if (Math.abs(state.dragYaw - state.targetDragYaw) < 0.05 && Math.abs(state.dragPitch - state.targetDragPitch) < 0.05) {
+                    if (window.parent !== window) {
+                        window.parent.postMessage({ type: 'navigate', url: '/archives' }, '*');
+                    }
+                }
+                handleClick(e);
+            });
 
             updateTheme();
             resize();
